@@ -397,7 +397,7 @@ function renderRail() {
   $('#rail').innerHTML = `<div class="mini">Smart Gated Industrial Communities<span>Management platform</span></div>` +
     ORDER.map(id => { const p = PAGES[id]; const badge = id === 'alarms' ? `<span class="bdg">${a.crit + a.warn}</span>` : id === 'vehicles' ? `<span class="bdg" style="background:#5530d6">${D.vehStats().pending}</span>` : '';
       return `${id === 'ops' || id === 'infra' ? '<div class="sep"></div>' : ''}<button type="button" class="navb t-${p.tone} ${id === cur ? 'on' : ''}" data-nav="${id}">${ring(p.icon)}<span>${p.nav}</span>${badge}</button>`; }).join('') +
-    `<div class="rlogos"><img src="logo-we.png" alt="WE"><img src="logo-aveva.png" alt="AVEVA"></div><button type="button" class="navb back" data-nav="overview">${ring('map')}<span>Back to overview</span></button>`;
+    `<div class="rlogos"><img src="logo-we.png" alt="WE"></div><button type="button" class="navb back" data-nav="overview">${ring('map')}<span>Back to overview</span></button>`;
 }
 $('#rail').addEventListener('click', e => { const b = e.target.closest('[data-nav]'); if (!b) return; b.dataset.nav === 'overview' ? closePage() : openPage(b.dataset.nav); });
 
@@ -1332,7 +1332,7 @@ async function exportPDF() {
   doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.text('Smart Gated Industrial Community - Executive Report', M, 11);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(150, 225, 255); doc.text(ascii(`Period: ${R.P}   |   Generated ${R.generated} (Cairo)   |   Simulated demo data`), M, 18.5);
   const logo = id => { const im = document.querySelector(`.hlogos img[alt="${id}"]`); if (!im || !im.naturalWidth) return null; const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; c.getContext('2d').drawImage(im, 0, 0); return [c.toDataURL('image/png'), im.naturalWidth / im.naturalHeight]; };
-  try { const we = logo('WE'), av = logo('AVEVA'); let x = W - M; if (av) { const w = 13 * av[1] * .62; x -= w; doc.addImage(av[0], 'PNG', x, 6, w, 13 * .62 * 1); } if (we) { x -= 15; doc.addImage(we[0], 'PNG', x, 4.5, 13, 13); } } catch { /* logos are optional */ }
+  try { const we = logo('WE'); let x = W - M; if (we) { x -= 13; doc.addImage(we[0], 'PNG', x, 4.5, 13, 13); } } catch { /* logos are optional */ }
   doc.setTextColor(20, 30, 70); doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.text('Key insights', M, 32);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8.6); let y = 37;
   R.insights.forEach(t => { const l = doc.splitTextToSize('- ' + ascii(t), W - 2 * M); doc.text(l, M, y); y += l.length * 3.8 + .6; });
